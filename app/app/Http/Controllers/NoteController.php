@@ -50,7 +50,7 @@ class NoteController extends Controller
             'text'=> $request->text
         ]);
         $note->save();
-        return to_route('notes.index');
+        return to_route('notes.index', $note);
 
     }
 
@@ -70,7 +70,10 @@ class NoteController extends Controller
      */
     public function edit(Note $note)
     {
-        //
+        if($note->user_id !== Auth::id()){
+            abort('403');
+        }
+        return view('notes.edit',['note'=>$note]);
     }
 
     /**
@@ -78,7 +81,21 @@ class NoteController extends Controller
      */
     public function update(Request $request, Note $note)
     {
-        //
+        if($note->user_id !== Auth::id()){
+            abort('403');
+        }
+        $request->validate([
+            'title'=>'required|max:120',
+            'text'=>'required'
+        ]);
+
+        $note->update([
+            'title'=>$request->title,
+            'text'=>$request->text
+        ]);
+
+        return to_route('notes.show', $note);
+
     }
 
     /**
@@ -86,6 +103,10 @@ class NoteController extends Controller
      */
     public function destroy(Note $note)
     {
-        //
+        if($note->user_id !== Auth::id()){
+            abort('403');
+        }
+        $note->delete();
+        return to_route('notes.index');
     }
 }

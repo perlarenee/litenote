@@ -10,9 +10,15 @@
             <div class="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg max-w-2xl">
                 <form action="{{ route('notes.store') }}" method="post" class="">
                     @csrf {{-- -every post of this type needs this --}}
-                    <x-text-input name="title" class="w-full" placeholder="Note Title">
+                    <x-text-input name="title" class="w-full" placeholder="Note Title" value="{{  @old('title') }}">
                     </x-text-input>
-                    <x-textarea name="text" class="mt-6 w-full" placeholder="Type Your Note" rows="8" value=""></x-textarea>
+                    @error('title')
+                    <div class="text-sm mt-1 text-red-500">{{  $message }}</div>
+                    @enderror
+                    <x-textarea name="text" class="mt-6 w-full" placeholder="Type Your Note" rows="8" value="{{  @old('text') }}"></x-textarea>
+                    @error('text')
+                    <div class="text-sm mt-1 text-red-500">{{  $message }}</div>
+                    @enderror
                     <x-primary-button class="mt-6">Save Note</x-primary-button>
                 </form>
             </div>

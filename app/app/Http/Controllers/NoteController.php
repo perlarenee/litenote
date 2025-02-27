@@ -43,13 +43,14 @@ class NoteController extends Controller
         'title'=>'required|max:120',
         'text'=>'required'
        ]);
-    $note = new Note([
-        'user_id' => Auth::id(),
-        'uuid'=> Str::uuid(),
-        'title' => $request->title,
-        'text'=> $request->text
-    ]);
-    $note->save();
+        $note = new Note([
+            'user_id' => Auth::id(),
+            'uuid'=> Str::uuid(),
+            'title' => $request->title,
+            'text'=> $request->text
+        ]);
+        $note->save();
+        return to_route('notes.index');
 
     }
 

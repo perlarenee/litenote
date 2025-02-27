@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('notebooks', function (Blueprint $table) {
             $table->id();
+            $table->uuid();
             $table->string('name');
             $table->foreignIdFor(User::class);
             $table->timestamps();

@@ -30,6 +30,12 @@
                                     >
                                         Notes
                                     </a>
+                                     | <a
+                                        href="{{ route('notebooks.index') }}"
+                                        class="text-indigo-600 hover:text-indigo-800"
+                                    >
+                                        Notebooks
+                                    </a>
                                 @else
 
                                     <a

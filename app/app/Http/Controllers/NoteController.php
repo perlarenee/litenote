@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use App\Models\Notebook;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +32,8 @@ class NoteController extends Controller
      */
     public function create()
     {
-        return view('notes.create'); //within notes dir
+        $notebooks = Notebook::where('user_id',Auth::id())->get();
+        return view('notes.create')->with('notebooks',$notebooks); //within notes dir
     }
 
     /**
@@ -47,10 +49,12 @@ class NoteController extends Controller
             'user_id' => Auth::id(),
             'uuid'=> Str::uuid(),
             'title' => $request->title,
-            'text'=> $request->text
+            'text'=> $request->text,
+            'notebook_id'=>$request->notebook_id
         ]);
         $note->save();
-        return to_route('notes.index', $note);
+        return to_route('notes.index', $note)
+        ->with('success','Note Created');
 
     }
 
@@ -70,10 +74,12 @@ class NoteController extends Controller
      */
     public function edit(Note $note)
     {
+        $notebooks = Notebook::where('user_id',Auth::id())->get();
+
         if($note->user_id !== Auth::id()){
             abort('403');
         }
-        return view('notes.edit',['note'=>$note]);
+        return view('notes.edit',['note'=>$note, 'notebooks' => $notebooks]);
     }
 
     /**
@@ -91,10 +97,12 @@ class NoteController extends Controller
 
         $note->update([
             'title'=>$request->title,
-            'text'=>$request->text
+            'text'=>$request->text,
+            'notebook_id'=>$request->notebook_id
         ]);
 
-        return to_route('notes.show', $note);
+        return to_route('notes.show', $note)
+        ->with('success','Changes saved');
 
     }
 
@@ -107,6 +115,7 @@ class NoteController extends Controller
             abort('403');
         }
         $note->delete();
-        return to_route('notes.index');
+        return to_route('notes.index')
+        ->with('success','Note Deleted');
     }
 }

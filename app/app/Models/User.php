@@ -46,5 +46,10 @@ class User extends Authenticatable
         ];
     }
 
+    //defining a user has many notes, relationship, one to many
+    public function notes(){
+        return $this->hasMany(Note::class);
+    }
+
 
 }
